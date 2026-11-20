@@ -230,6 +230,7 @@ void iris_vpu_power_off_hw(struct iris_core *core)
 
 void iris_vpu_power_off(struct iris_core *core)
 {
+	core->powered = false;
 	iris_opp_set_rate(core->dev, 0);
 	core->iris_platform_data->vpu_ops->power_off_hw(core);
 	core->iris_platform_data->vpu_ops->power_off_controller(core);
@@ -517,6 +518,7 @@ int iris_vpu_power_on(struct iris_core *core)
 
 	iris_vpu_interrupt_init(core);
 	core->intr_status = 0;
+	core->powered = true;
 	if (core->wdt_irq_disabled) {
 		core->wdt_irq_disabled = false;
 		enable_irq(core->irq);
